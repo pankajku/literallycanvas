@@ -78,6 +78,10 @@ module.exports = class LiterallyCanvas
 
     @respondToSizeChange = ->
 
+  # Added by Pankaj
+  getLastShape: ->
+    if @_shapesInProgress then @_shapesInProgress[@_shapesInProgress.length - 1] else null
+
   bindToElement: (containerEl) ->
     if @containerEl
       console.warn("Trying to bind Literally Canvas to a DOM element more than once is unsupported.")
@@ -212,6 +216,16 @@ module.exports = class LiterallyCanvas
     @execute(new actions.AddShapeAction(this, shape, previousShapeId))
     if triggerShapeSaveEvent
       @trigger('shapeSave', {shape, previousShapeId})
+    @trigger('drawingChange')
+
+  # added by Pankaj
+  clearShape: (shape, triggerShapeSaveEvent=true) ->
+    newShapes = []
+    for shp in @shapes
+      newShapes.push(shp) if shp.id != shape.id
+    @execute(new actions.ClearAction(this, @shapes, newShapes))
+    if triggerShapeSaveEvent
+      @trigger('shapeClear', {shape})
     @trigger('drawingChange')
 
   pan: (x, y) ->

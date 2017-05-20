@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <title>LC Menu Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1" />
+
+    <link href="/lib/css/literallycanvas.css" rel="stylesheet">
+    <link href="/static/lcmenu/menus.css" rel="stylesheet">
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+
+    <script src="/demo/jquery-1.8.2.js""></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="/demo/jquery.ui.touch-punch.min.js"></script>
+	<script src="/lib/js/literallycanvas-core.js"></script>
+	<script src="/demo/fastclick.js"></script>
+	<script src="/static/lcmenu/menus.js"></script>
+    <style type="text/css">
+body {
+	background-color: gray;
+	padding: 0px;
+}
+#container {
+	background-color: transparent;
+	width: 850px;
+	height: 1100px;
+	margin: auto;
+}
+#page {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+#drawing-area {
+	width: 100%;
+	height: 100%;
+	background-color: Snow;
+}
+.question {
+	padding: 5px;
+	background-color: Ivory;
+	margin-left: 0px;
+	border: 2px solid black;
+}
+    </style>
+<script>
+$(document).ready(function() {
+	initPage();
+});
+</script>
+  </head>
+
+<body>
+<div id="container">
+<div id="page">
+	<div id="question" class="question" style="height:100px;">
+	<div id="answer">
+	<input id="id_solution" name="solution" type="hidden" value=""></input>
+	</div>
+	</div>
+	<div id="drawing-area"></div>
+	<div id="lc-menu"></div>
+</div>
+</div>
+</body>
+<script>
+var lc = null;
+function initPage(){
+	var destCanvas = null, destCtx = null;
+	var drawingArea = document.getElementById('drawing-area');
+
+	var showLC = function() {
+		// disable scrolling on touch devices so we can actually draw
+		$('#drawing-area').bind('touchmove', function(e) {
+			if (e.target === document.documentElement) {
+				return e.preventDefault();
+			}
+		});
+		lc = LC.init(drawingArea, {
+			defaultStrokeWidth: 2,
+			strokeWidths: [2, 4, 8, 16],
+			secondaryColor: 'transparent',
+		});
+		new LCMenu.largeMenu(lc);
+	};
+
+	adjustDimensions(showLC);
+	$(window).scroll(keepToolboxInView);
+}
+function adjustDimensions(showLC){
+	$question = $( "#question" )
+	$page = $( "#page" )
+	var border = parseInt($question.css('border-width'));
+	var paddingLeft = parseInt($question.css('padding-left'));
+	var paddingRight = parseInt($question.css('padding-right'));
+	var width = Math.min(document.body.clientWidth, $('#page').width())
+	if (isNaN(border)) border = 2;
+	qn_width = width - 2*border - (paddingLeft+paddingRight)
+	$question.css({width: qn_width});
+	$qn_images = $( "#question img" )
+	var img_count = 0;
+	$qn_images.each(function(i, img){
+		if (img.complete) img_count += 1;
+	});
+	function init(){
+		$("#lc-menu").css({top: $question.height() + 'px'});
+		showLC();
+		/* new LCMenu.largeMenu(lc); */
+	}
+	if ($qn_images.length == img_count){
+		init();
+	} else {
+		$qn_images.load(function(){
+			img_count += 1;
+			if ($qn_images.length == img_count){
+				init();
+			}
+		});
+	}
+}
+
+function keepToolboxInView(){
+	var $w = $(window);
+	var $m = $("#lc-menu");
+	if ($w.scrollLeft() > $m.position().left){
+		$m.css({left: $w.scrollLeft()});
+	}
+	if ($w.scrollTop() > $m.position().top){
+		$m.css({top: $w.scrollTop()});
+	}
+	if ($w.scrollLeft() + $w.width() < $m.position().left + 80){
+		$m.css({left: $w.scrollLeft() + $w.width() - 80});
+	}
+	if ($w.scrollTop() + $w.height() < $m.position().top + 80){
+		$m.css({top: $w.scrollTop() + $w.height() - 80});
+	}
+}
+
+</script>
+</html>

@@ -20,6 +20,8 @@ module.exports = class SelectShape extends Tool
         func()
 
     onDown = ({ x, y }) =>
+      # move cursor added by Pankaj
+      document.body.style.cursor = 'move';
       @didDrag = false
 
       shapeIndex = @_getPixel(x, y, lc, @selectCtx)
@@ -54,6 +56,8 @@ module.exports = class SelectShape extends Tool
         lc.repaintLayer 'main'
 
     onUp = ({ x, y }) =>
+      # Added by Pankaj
+      document.body.style.cursor = 'auto';
       if @didDrag
         @didDrag = false
         lc.trigger('shapeMoved', { shape: @selectedShape })

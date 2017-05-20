@@ -39,6 +39,12 @@ module.exports = class Polygon extends ToolWithStroke
 
     onDown = ({x, y}) =>
       @maybePoint = {x, y}
+      # Added by Pankaj. Start on first down
+      if !@points
+        lc.trigger 'lc-polygon-started'
+        @points = [@maybePoint]
+        @maybePoint = {x: @maybePoint.x, y: @maybePoint.y}
+
       lc.setShapesInProgress(@_getShapes(lc))
       lc.repaintLayer('main')
 

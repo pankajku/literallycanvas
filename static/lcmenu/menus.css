@@ -1,0 +1,145 @@
+#preview-area {
+	border: 2px solid black;
+	display: none;
+}
+#shape-picker {
+	display: none;
+	width: 80px;
+	height: 40px;
+}
+#color-picker {
+	display: none;
+	width: 160px;
+	height: 80px;
+}
+#size-picker {
+	display: none;
+	width: 160px;
+	height: 40px;
+}
+#lc-menu {
+	position: absolute;
+}
+#lcm-tab {
+	position: absolute;
+	height: 36px; width: 80px;
+	border-radius: 10px 10px 0px 0px;
+	border: 2px solid black;
+	background-color: LightGray;
+	cursor: move;
+}
+#tools-drag {
+	width: 24px;
+	display: inline-block;
+	background: url(/static/lcmenu/images/drag.png);
+}
+#tools-span {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	margin-left: 2px;
+	padding-top: 8px;
+}
+#sm-body {
+	position: absolute; 
+	width: 80px; 
+	height: 80px; 
+	border: 2px solid black; 
+	display: none; 
+}
+#lm-body {
+	position: absolute; 
+	width: 160px; 
+	height: 160px; 
+	border: 2px solid black; 
+	display: none; 
+}
+.tool-icon {
+	display: inline-block;
+	width: 35px; 
+	height: 35px; 
+	border: 1px solid Gray;
+	/* margin: -2px -2px; */
+	background-color: White;
+}
+#undo-tool {
+	background: url(/static/lcmenu/images/undo.png);
+	background-size: 100%;
+}
+#redo-tool {
+	background: url(/static/lcmenu/images/redo.png);
+	background-size: 100%;
+}
+#pencil-tool {
+	background: url(/static/lcmenu/images/pencil.png);
+	background-size: 100%;
+}
+#eraser-tool {
+	background: url(/static/lcmenu/images/eraser.png);
+	background-size: 100%;
+}
+#preview-tool {
+	background: url(/static/lcmenu/images/preview.png);
+	background-size: 100%;
+}
+#clear-tool {
+	background: url(/static/lcmenu/images/clear.png);
+	background-size: 100%;
+}
+#line-tool {
+	background: url(/static/lcmenu/images/line.png);
+	background-size: 100%;
+}
+#shapes-tool {
+	background: url(/static/lcmenu/images/shapes.png);
+	background-size: 100%;
+}
+#math-tool {
+	background: url(/static/lcmenu/images/math.png);
+	background-size: 100%;
+}
+#rectangle-tool {
+	background: url(/static/lcmenu/images/rectangle.png);
+	background-size: 100%;
+}
+#ellipse-tool {
+	background: url(/static/lcmenu/images/ellipse.png);
+	background-size: 100%;
+}
+#polygon-tool {
+	background: url(/static/lcmenu/images/polygon.png);
+	background-size: 100%;
+}
+#select-tool {
+	background: url(/static/lcmenu/images/select.png);
+	background-size: 100%;
+}
+#fcolor-tool {
+	background: url(/static/lcmenu/images/fcolor.png);
+	background-size: 100%;
+}
+#scolor-tool {
+	background: url(/static/lcmenu/images/scolor.png);
+	background-size: 100%;
+}
+#swidth-tool {
+	background: url(/static/lcmenu/images/swidth.png);
+	background-size: 100%;
+}
+#delete-tool {
+	background: url(/static/lcmenu/images/delete.png);
+	background-size: 100%;
+}
+#text-tool {
+	background: url(/static/lcmenu/images/text.png);
+	background-size: 100%;
+}
+
+.selected {
+	opacity: 0.5;
+}
+.colored-layer {
+	top: 0px; left: 0px;
+	width: 100%; height: 100%;
+	background-color: transparent;
+	opacity: 0.6;
+}

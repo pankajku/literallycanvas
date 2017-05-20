@@ -23,8 +23,10 @@ module.exports = class Text extends Tool
     @initialShapeBoundingRect = null
     @dragAction = null
     @didDrag = false
+    @active = false # Added by Pankaj
 
   didBecomeActive: (lc) ->
+    @active = true
     unsubscribeFuncs = []
     @unsubscribe = =>
       for func in unsubscribeFuncs
@@ -63,6 +65,7 @@ module.exports = class Text extends Tool
       @_ensureNotEditing(lc)
       @commit(lc)
     @unsubscribe()
+    @active = false
 
   setText: (text) ->
     @text = text
