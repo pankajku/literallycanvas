@@ -116,6 +116,14 @@ module.exports = class LiterallyCanvas
     @containerEl = null
     @isBound = false
 
+  addEventListeners: ->
+    if @containerEl and not @_unsubscribeEvents
+      @_unsubscribeEvents = bindEvents(this, @containerEl, @opts.keyboardShortcuts)
+
+  removeEventListeners: ->
+    @_unsubscribeEvents?()
+    @_unsubscribeEvents = null
+
   trigger: (name, data) ->
     @canvas.dispatchEvent(new CustomEvent(name, detail: data))
     # dispatchEvent has a boolean value that doesn't mean anything to us, so

@@ -1,3 +1,19 @@
+var LCNoOpTool = function(lc) {  // take lc as constructor arg
+  var self = this;
+
+  return {
+    usesSimpleAPI: false,  // DO NOT FORGET THIS!!!
+    name: 'MyTool',
+
+    didBecomeActive: function(lc) {
+		lc.removeEventListeners();
+    },
+
+    willBecomeInactive: function(lc) {
+ 		lc.addEventListeners();
+    }
+  }
+};
 LCMenu = {
 	tools: {},
 	setDefaults: function(options){
@@ -31,7 +47,6 @@ LCMenu = {
 		$('#preview-area', $body).css({width: $('#page').width()*previewScale, height: $('#page').height()*previewScale});
 		$('#undo-tool', $body).click(function(){ lc.undo(); });
 		$('#redo-tool', $body).click(function(){ lc.redo(); });
-		menu = this;
 		$('#preview-tool', $body).click(function(){ 
 			var $preview = $('#preview-area');
 			if ($preview.css('display') == 'none'){
@@ -63,13 +78,13 @@ LCMenu = {
 			polygon: new LC.tools.Polygon(lc),
 			select: new LC.tools.SelectShape(lc),
 		}
+		noopTool = LCNoOpTool(lc);
 		for (tool in menu.tools){
 			$('#' + tool + '-tool', $body).click(function(){
 				var tool = this.id.split('-')[0];
-				if (tool == 'select' && menu.$selIconElem && menu.$selIconElem.attr('id') == this.id){
-					menu.tools['select'].willBecomeInactive(lc);
+				if (menu.$selIconElem && menu.$selIconElem.attr('id') == this.id){
+					lc.setTool(noopTool); // the default tool
 					lc.repaintLayer('main');
-					lc.setTool(menu.tools['pencil']); // the default tool
 					menu.$selIconElem.removeClass('selected');
 					menu.$selIconElem = null;
 				} else {
@@ -83,11 +98,11 @@ LCMenu = {
 			});
 		}
 		$('#delete-tool', $body).click(function(){ 
-			if (menu.$selIconElem){
+			if (menu.$selIconElem && menu.tools['select'].selectedShape){
 				selShape = menu.tools['select'].selectedShape;
 				menu.tools['select'].willBecomeInactive(lc);
 				lc.repaintLayer('main');
-				lc.setTool(menu.tools['pencil']); // the default tool
+				lc.setTool(noopTool); // the default tool
 				menu.$selIconElem.removeClass('selected');
 				menu.$selIconElem = null;
 				lc.clearShape(selShape);
@@ -121,8 +136,10 @@ LCMenu = {
 				$spicker.css('display', 'none');
 			}
 		});
-		rgbaStrings = {
-			red: 'rgba(255, 0, 0, .2)',
+		function updatePoints(points, attr, value){
+			for (var i = 0; i < points.length; i++){
+				points[i][attr] = value;
+			}
 		}
 		$('#color-picker .tool-icon', $body).click(function(ev){
 			var color = this.id.split('-')[1];
@@ -130,11 +147,39 @@ LCMenu = {
 			var $cpicker = $('#color-picker', $body);
 			$cpicker.css('display', 'none');
 			$coloredLayerElem = (type == 'primary' ? $('#scolor-tool .colored-layer', $body) : $('#fcolor-tool .colored-layer', $body));
+			if (menu.$selIconElem && menu.tools['select'].selectedShape){
+				var selShape = menu.tools['select'].selectedShape;
+				if (selShape.strokeColor && type == 'primary'){
+					selShape.strokeColor = color;
+					if (selShape.points) updatePoints(selShape.points, 'color', color);
+				}
+				if (selShape.color && type == 'primary'){
+					selShape.color = color;
+				}
+				if (selShape.smoothedPoints && type == 'primary'){
+					updatePoints(selShape.smoothedPoints, 'color', color);
+				}
+				if (selShape.fillColor && type == 'secondary'){
+					selShape.fillColor = color;
+				}
+				lc.repaintLayer('main');
+			}
 			$coloredLayerElem.css({backgroundColor: color});
 		});
 		$('#size-picker .tool-icon', $body).click(function(ev){
 			var size = parseInt(this.id.split('-')[1]);
 			lc.trigger('setStrokeWidth', size);
+			if (menu.$selIconElem && menu.tools['select'].selectedShape){
+				var selShape = menu.tools['select'].selectedShape;
+				if (selShape.strokeWidth){
+					selShape.strokeWidth = size;
+					if (selShape.points) updatePoints(selShape.points, 'size', size);
+				}
+				if (selShape.smoothedPoints){
+					updatePoints(selShape.smoothedPoints, 'size', size);
+				}
+				lc.repaintLayer('main');
+			}
 			var $spicker = $('#size-picker', $body);
 			$spicker.css('display', 'none');
 		});

@@ -66,22 +66,26 @@ $(document).ready(function() {
 </body>
 <script>
 var lc = null;
+
 function initPage(){
 	var destCanvas = null, destCtx = null;
 	var drawingArea = document.getElementById('drawing-area');
-
+	
 	var showLC = function() {
 		// disable scrolling on touch devices so we can actually draw
+		/*
 		$('#drawing-area').bind('touchmove', function(e) {
 			if (e.target === document.documentElement) {
 				return e.preventDefault();
 			}
 		});
+		*/
 		lc = LC.init(drawingArea, {
 			defaultStrokeWidth: 2,
 			strokeWidths: [2, 4, 8, 16],
 			secondaryColor: 'transparent',
 		});
+		lc.setTool(LCNoOpTool(lc));
 		new LCMenu.largeMenu(lc);
 	};
 

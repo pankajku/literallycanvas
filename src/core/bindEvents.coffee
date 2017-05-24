@@ -38,7 +38,7 @@ module.exports = bindEvents = (lc, canvas, panWithKeyboard = false) ->
 
     canvas.addEventListener 'mousemove', mouseMoveListener
 
-  canvas.addEventListener 'mousedown', (e) =>
+  mouseDownListener = (e) ->
     return if e.target.tagName.toLowerCase() != 'canvas'
 
     down = true
@@ -51,6 +51,8 @@ module.exports = bindEvents = (lc, canvas, panWithKeyboard = false) ->
     document.addEventListener 'mousemove', mouseMoveListener
     document.addEventListener 'mouseup', mouseUpListener
 
+  canvas.addEventListener 'mousedown', mouseDownListener
+  unsubs.push -> canvas.removeEventListener('mousedown', mouseDownListener)
 
   touchMoveListener = (e) ->
     e.preventDefault()
@@ -63,7 +65,7 @@ module.exports = bindEvents = (lc, canvas, panWithKeyboard = false) ->
     document.removeEventListener 'touchend', touchEndListener
     document.removeEventListener 'touchcancel', touchEndListener
 
-  canvas.addEventListener 'touchstart', (e) ->
+  touchStartListener = (e) ->
     return if e.target.tagName.toLowerCase() != 'canvas'
     e.preventDefault()
     if e.touches.length == 1
@@ -71,8 +73,13 @@ module.exports = bindEvents = (lc, canvas, panWithKeyboard = false) ->
       document.addEventListener 'touchmove', touchMoveListener
       document.addEventListener 'touchend', touchEndListener
       document.addEventListener 'touchcancel', touchEndListener
+    ### Commented out by Pankaj. Multi-touch is problematic.
     else
       lc.pointerMove(coordsForTouchEvent(canvas, e)...)
+    ###
+
+  canvas.addEventListener 'touchstart', touchStartListener
+  unsubs.push -> canvas.removeEventListener('touchstart', touchStartListener)
 
   if panWithKeyboard
     console.warn("Keyboard panning is deprecated.")
