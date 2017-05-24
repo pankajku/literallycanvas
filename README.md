@@ -33,3 +33,17 @@ in progress.
 
 To generate a production-ready `.js` file, run `gulp` and pull out either
 `lib/js/literallycanvas.js` or `lib/js/literallycanvas.min.js`.
+
+Pankaj's Updates
+----------------
+Forked the master branch to use selection box. Here are the list of features and changes:
+
+1. **Movable Toolobx.** Added LCMenu, a movable toolbox for easy drawing on touchpads. The Javascript, CSS and assets are in directory `static/lcmenu`. To see this in action, run `gulp dev` as explained in [Developing](#Developing) section and point your Browser to <http://localhost:8080/demo/lcmenu_demo.html>
+2. **Zoom on Pinch.** Disabled event listeners when none of the tools are active -- added methods `addEventListeners` and `removeEventListeners` to file `src/core/LiterallyCanvas.coffee` for use by `LCNoOpTool`. This also required changes in file `src/core/bindEvents.coffee`. Also ignored multi-touch events.
+3. **Update Selected Shape: change strokeWidth, strokeColor, fillColor. Delete Selected Shape.** 
+4. **Allow Active Text Shape to be saved.**
+5. **Start Polygon on Single Click.**
+6. **Scaled SVG Rendering.**
+7. **Optimized Rendering of LinePath (Pencil).**
+
+You can see my code changes via [git diff](https://github.com/literallycanvas/literallycanvas/compare/master...pankajku:leetmath_editors).
